@@ -1,0 +1,50 @@
+{
+    "name": "bit-craft-io/laravel-ddd-core",
+    "description": "Laravel 向けの DDD 基盤クラス群(Base*、Middleware、Libraries)。",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "ddd"
+    ],
+    "require": {
+        "php": "^8.5.12",
+        "ext-zlib": "*",
+        "hidehalo/nanoid-php": "^2.0",
+        "laravel/framework": "^13.0",
+        "laravel/sanctum": "^4.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "mockery/mockery": "^1.6",
+        "orchestra/testbench": "^11.3",
+        "phpstan/phpstan": "^2.2",
+        "phpunit/phpunit": "^12.0"
+    },
+    "bin": [
+        "bin/except-code-check"
+    ],
+    "autoload": {
+        "psr-4": {
+            "BitCraft\\Core\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BitCraft\\Core\\Tests\\": "tests/",
+            "App\\": "tests/App/",
+            "Fixtures\\": "tests/Fixtures/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --bootstrap vendor/autoload.php tests",
+        "analyse": "phpstan analyse src tests --level=5",
+        "cs": "php-cs-fixer fix --dry-run --diff --rules=@PSR12 src tests",
+        "cs-fix": "php-cs-fixer fix --rules=@PSR12 src tests"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

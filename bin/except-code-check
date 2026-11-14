@@ -1,0 +1,45 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+// 使い方: php vendor/bin/except-code-check [<利用側の enum のディレクトリ> <名前空間>]
+//   例: php vendor/bin/except-code-check app/Exceptions/Enum 'App\Exceptions\Enum'
+// core の enum は、常に検査する。違反があれば、終了コード 1。
+
+$autoloads = [
+    $GLOBALS['_composer_autoload_path'] ?? null,
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../../autoload.php',
+];
+foreach ($autoloads as $autoload) {
+    if ($autoload !== null && is_file($autoload)) {
+        require $autoload;
+        break;
+    }
+}
+
+use BitCraft\Core\Libraries\Stateless\Static\StlStaExceptCode;
+
+$dir = $argv[1] ?? null;
+$namespace = $argv[2] ?? null;
+if (($dir === null) !== ($namespace === null)) {
+    fwrite(STDERR, "usage: except-code-check [<dir> <namespace>]\n");
+    exit(2);
+}
+
+$enums = StlStaExceptCode::discover(__DIR__ . '/../src/Exceptions/Enum', 'BitCraft\\Core\\Exceptions\\Enum');
+if ($dir !== null) {
+    $enums = array_merge($enums, StlStaExceptCode::discover($dir, $namespace));
+}
+
+['violations' => $violations, 'count' => $count] = StlStaExceptCode::check($enums);
+foreach ($violations as $violation) {
+    echo "NG  {$violation}\n";
+}
+if ($violations === []) {
+    echo "OK  {$count} 件\n";
+    exit(0);
+}
+echo 'NG  ' . count($violations) . " 件の違反({$count} 件中)\n";
+exit(1);

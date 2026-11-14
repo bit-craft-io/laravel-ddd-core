@@ -1,0 +1,13 @@
+{
+  "requiredPlugins": [
+    {
+      "source": "git-subdir",
+      "url": "https://github.com/bit-craft-io/laravel-ddd-core.git",
+      "path": ".devin",
+      "ref": "develop"
+    }
+  ],
+  "read_config_from": {
+    "claude": false
+  }
+}
